@@ -23,7 +23,7 @@ body{
   width: 100%;
 }
 
-/* Hide custom cursor on mobile/touch to prevent interaction bugs */
+/* Hide custom cursor on mobile/touch */
 @media (pointer: coarse) {
   body { cursor: auto; }
   #cur, #ring { display: none; }
@@ -55,7 +55,7 @@ body{
 }
 
 .blue-shimmer {
-  background: linear-gradient(90deg, #00d2ff 0%, #ffffff 45%, #00d2ff 55%, #ffffff 100%);
+  background: linear-gradient(90deg, #00d2ff 0%, #ffffff 45%, #0095ff 55%, #ffffff 100%);
   background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   animation: sweep 10s ease-in-out infinite; 
 }
@@ -64,11 +64,12 @@ body{
 .animate-name { opacity: 0; animation: fadeInUpBlur 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; word-wrap: break-word; } 
 .hero-fade { opacity: 0; animation: fadeInUpBlur 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s forwards; }
 
+/* Scroll reveal style */
 .gc {
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), filter 1s ease;
-  filter: blur(15px);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.8s ease;
+  filter: blur(10px);
 }
 .gc.reveal { opacity: 1; transform: translateY(0); filter: blur(0px); }
 
@@ -102,7 +103,46 @@ body{
 }
 .gc:hover .spot { opacity:1; }
 
-/* ── TYPOGRAPHY & BADGES ── */
+/* ── PROFILE & VISUALS ── */
+.profile-box {
+  width: 100px; 
+  height: 100px; 
+  border-radius: 28px; 
+  position: relative; 
+  margin-bottom: 2rem; 
+  background: var(--surface);
+  z-index: 1;
+}
+
+/* Glow Effect */
+.profile-box::before {
+  content: '';
+  position: absolute;
+  inset: -15px;
+  border-radius: 40px;
+  background: radial-gradient(circle, rgba(0, 208, 255, 0.545) 0%, rgba(4, 242, 255, 0.085) 70%);
+  filter: blur(20px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.profile-box img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  border-radius: 28px; 
+  border: 1px solid var(--border);
+  display: block;
+}
+
+.visit-card {
+  border-radius: 16px; overflow: hidden; height: 240px;
+  border: 1px solid var(--border); background: var(--surface);
+}
+.visit-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.visit-card:hover img { transform: scale(1.08); }
+
+/* ── TYPOGRAPHY ── */
 .eyebrow{font-size:.75rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--t3); margin-bottom:1.2rem; display:block;}
 .h-lg{font-size:1.8rem; font-weight:600; margin-bottom:1.5rem; color:var(--t1);}
 .body-sm{font-size:1rem; line-height:1.6; color:var(--t2);}
@@ -113,30 +153,21 @@ body{
   letter-spacing: 0.02em; white-space: nowrap; backdrop-filter: blur(4px);
 }
 .b-blue { background: rgba(0, 210, 255, 0.1) !important; border-color: rgba(0, 210, 255, 0.3) !important; color: #00d2ff !important; }
-.b-gold { background: rgba(255, 184, 0, 0.1) !important; border-color: rgba(255, 184, 0, 0.3) !important; color: #ffb800 !important; }
+.b-gold { background: rgba(111, 255, 0, 0.1) !important; border-color: rgba(64, 255, 0, 0.3) !important; color: #7dfe79 !important; }
 
 .edu-item { display: flex; gap: 16px; align-items: flex-start; }
 .edu-icon { width: 22px; height: 22px; color: var(--blue); margin-top: 4px; flex-shrink: 0; }
 
-/* ── MOBILE OPTIMIZATIONS ── */
+/* ── MOBILE ── */
 @media(max-width:1024px){
   .container { padding: 2rem 1.5rem; }
   .bento { grid-template-columns: 1fr; gap: 16px; }
   .span2, .span3 { grid-column: span 1; }
   .gc { padding: 1.5rem; border-radius: 20px; }
-  
-  /* Prevent nested grid layouts from cropping */
   .gc div[style*="grid-template-columns"] {
     grid-template-columns: 1fr !important;
-    gap: 20px !important;
+    gap: 16px !important;
   }
-}
-
-@media(max-width:640px){
-  section.container { padding-top: 6rem !important; }
-  .h-lg { font-size: 1.4rem; }
-  .body-sm { font-size: 0.95rem; }
-  .shimmer-text { line-height: 1.1; }
 }
 </style>
 </head>
@@ -146,9 +177,12 @@ body{
 <div id="ring"></div>
 
 <section class="container" style="padding-top:10rem; padding-bottom:4rem;">
+  <div class="profile-box animate-eyebrow">
+    <img src="images/profile.jpg" alt="Ramida Penuka">
+  </div>
   <span class="eyebrow animate-eyebrow">— Portfolio 2026 —</span>
   <h1 class="animate-name" style="font-size:clamp(3rem,10vw,6.5rem); letter-spacing:-.05em; line-height:1;">
-    <span class="shimmer-text">Ramida Penuka.</span>
+    <span class="shimmer-text">Ramida Penuka </span>
   </h1>
   <p class="body-sm hero-fade" style="font-size:clamp(1.1rem, 3vw, 1.4rem); max-width:800px; margin-top:2rem; color:var(--t1);">
     Transport Management & Logistics Engineering Undergraduate. 
@@ -208,7 +242,7 @@ body{
       <div class="spot"></div>
       <span class="eyebrow">Technical Engineering</span>
       <h3 class="h-lg blue-shimmer">Systems & Automation</h3>
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:20px;">
         <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <p style="color:var(--blue); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">EXPORT LOGISTICS</p>
@@ -232,29 +266,40 @@ body{
       <div class="spot"></div>
       <span class="eyebrow">Professional Experience</span>
       <h3 class="h-lg blue-shimmer">Projects & Impact</h3>
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
         <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
           <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">CHAIR PERSON</p>
           <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Data Storm v6.0 - OCTAVE</p>
-          <p class="body-sm">Led industry collaboration with <span style="color: var(--blue); border-bottom: 1px solid rgba(0, 210, 255, 0.3); font-weight: 500;">John Keells Holdings</span> for data analytics competitions.</p>
+          <p class="body-sm">Led industry collaboration with <span style="color: var(--blue); border-bottom: 1px solid rgba(0, 210, 255, 0.3); font-weight: 500;">John Keells Holdings</span> for data analytics.</p>
         </div>
         <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
           <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">PROJECT LEADER</p>
           <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Library Renovation - Atlas Axillia</p>
-          <p class="body-sm">Managed end-to-end renovation project for Atlas Axillia, a subsidiary of <span style="color: var(--blue); border-bottom: 1px solid rgba(0, 210, 255, 0.3); font-weight: 500;">Hemas Holdings</span>.</p>
-        </div>
-        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
-          <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">FINANCE LEAD</p>
-          <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Project Rhythm Devine</p>
-          <p class="body-sm">Ensured rigorous financial transparency and budget control for large-scale logistics initiatives.</p>
+          <p class="body-sm">Managed end-to-end renovation project for Atlas Axillia, a subsidiary of <span style="color: var(--blue); border-bottom: 1px solid rgba(0, 210, 255, 0.3); font-weight: 500;">Hemas Holdings. </span>.</p>
         </div>
         <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
           <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">LEADERSHIP</p>
-          <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Inducted Member - Rotaract Club</p>
-          <p class="body-sm">Officially inducted based on consistent dedication; cultivating leadership and teamwork.</p>
+          <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Rotaract Club Member</p>
+          <p class="body-sm">Inducted based on dedication to community-driven logistics and teamwork.</p>
         </div>
       </div>
     </div>
+
+    <div class="gc span3">
+      <div class="spot"></div>
+      <span class="eyebrow">Visual Insights</span>
+      <h3 class="h-lg blue-shimmer">Field Visits & Practical Exposure</h3>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
+        <div class="visit-card">
+          <img src="images/visit1.jpg" alt="Field Visit Photo 1">
+        </div>
+        <div class="visit-card">
+          <img src="images/visit2.jpg" alt="Field Visit Photo 2">
+        </div>
+      </div>
+      <p class="body-sm" style="margin-top: 1.5rem;">Engaging with terminal infrastructure and supply chain networks to bridge the gap between engineering theory and industrial reality.</p>
+    </div>
+
   </div>
 </div>
 
@@ -264,7 +309,7 @@ body{
 </footer>
 
 <script>
-/* ── CUSTOM CURSOR ── */
+/* ── CURSOR ── */
 const cur=document.getElementById('cur'), ring=document.getElementById('ring');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{
@@ -277,7 +322,7 @@ document.addEventListener('mousemove',e=>{
   requestAnimationFrame(anim);
 })();
 
-/* ── INTERACTIVE BENTO HOVER ── */
+/* ── INTERACTIVE HOVER ── */
 document.querySelectorAll('.gc').forEach(card=>{
   card.addEventListener('mousemove',e=>{
     const r=card.getBoundingClientRect();
@@ -296,15 +341,14 @@ document.querySelectorAll('.gc').forEach(card=>{
   });
 });
 
-/* ── SCROLL OBSERVER ── */
-const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+/* ── REPLAYABLE SCROLL REVEAL ── */
+const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -50px 0px' };
 const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry, index) => {
+  entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      setTimeout(() => {
-        entry.target.classList.add('reveal');
-      }, index * 60);
-      revealObserver.unobserve(entry.target);
+      entry.target.classList.add('reveal');
+    } else {
+      entry.target.classList.remove('reveal');
     }
   });
 }, observerOptions);

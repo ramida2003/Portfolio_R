@@ -125,7 +125,7 @@ body.focus-mode::after {
   background: var(--surface); 
   z-index: 10;
   transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0.2s ease !important;
-  transform: scale(1.15);
+  transform: scale(1.1);
   transform-origin: left top;
   will-change: transform;
 }
@@ -358,6 +358,22 @@ body.focus-mode::after {
   .hero-quote-adjustable { display: none; }
 }
 
+/* Ensure the container is a flexible box */
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1400px; /* Or your preferred max width */
+  margin: 0 auto;
+  padding: 0 5%; /* Flexible side padding (5% of screen width) */
+  box-sizing: border-box; /* Crucial: keeps padding INSIDE the width calculation */
+}
+
+/* Remove any horizontal scrolling globally */
+html, body {
+  overflow-x: hidden;
+  position: relative;
+}
 
 </style>
 </head>
@@ -371,7 +387,7 @@ body.focus-mode::after {
 <div class="main-wrapper">
   <section class="container" style="padding-top:3rem; padding-bottom:3rem;">
     <div class="profile-box animate-eyebrow">
-      <img src="profile.jpg" alt="Ramida Penuka">
+      <img src="images/profile.jpg" alt="Ramida Penuka">
     </div>
 
     
@@ -383,11 +399,20 @@ body.focus-mode::after {
 
     <span class="eyebrow animate-eyebrow">— Portfolio 2026 —</span>
       <div class="name-entrance-wrapper">
-        <h1 class="animate-name" style="font-size:clamp(3.5rem,10vw,6.5rem); letter-spacing:-.05em; line-height:1.1;">
+        <h1 class="animate-name" style="font-size:clamp(3.5rem,10vw,6.5rem);margin-top: -0.35rem; letter-spacing:-.05em; line-height:1.1;">
           <span class="shimmer-text">Ramida Penuka </span>
 
-          <p class="body-sm hero-fade" style="font-size:clamp(1.1rem, 3vw, 1.2rem); max-width:max-width; margin-top:1rem; color: rgb(150, 150, 150); letter-spacing: 0.03em;">
-            Transport Management & Logistics Engineering Undergraduate.<br>
+          <p class="body-sm hero-fade" 
+            style="font-size: clamp(1rem, 2.5vw, 1.25rem); 
+              width: 92%; 
+              max-width: 65ch; 
+              margin-top: 0.25rem;
+              margin-bottom: -1.75rem; 
+              color: rgba(158, 158, 158, 0.8); 
+              letter-spacing: 0.02em; 
+              line-height: 1.7; 
+              word-break: break-word;">
+            Transport Management & Logistics Engineering Undergraduate.
             Synthesizing engineering precision with data analytics to optimize global supply chains.
           </p>
         </h1>
@@ -395,11 +420,14 @@ body.focus-mode::after {
     
   </section>
 
+
+
+  
   <div class="container" style="padding-top: 0;">
 
     <section class="container" style="position: relative;"> 
       <div class="hero-quote-adjustable hero-fade" 
-        style="--top: -28rem; 
+        style="--top: -27rem; 
               --right: 0rem;   /* This now means 0px from the right edge of the CARDS */
               --width: 300px; 
               --size: 0.95rem; 
@@ -430,6 +458,7 @@ body.focus-mode::after {
               <div class="highlight-badge" style="margin-top:10px;">2028 Graduate</div>
             </div>
           </div>
+          
           <div class="interactive-item" style="display: flex; gap: 16px;">
             <svg style="width: 22px; height: 22px; color: var(--blue); margin-top: 4px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
             <div>

@@ -20,6 +20,7 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
   --violet:#7c5cfc;--blue:#00d2ff;
 }
 
+/* ── Body color ── */
 body{
   background:#080809;
   background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
@@ -242,7 +243,7 @@ body.focus-mode::after {
   margin-bottom: 0.5rem; /* Gap between different credentials */
 }
 
-/* Ensure the bar stays exactly on the left edge of the alignment */
+/* ── Ensure the bar stays exactly on the left edge of the alignment ── */
 .interactive-item::before { 
   content: ''; 
   position: absolute; 
@@ -256,8 +257,8 @@ body.focus-mode::after {
   border-radius: 4px; 
 }
 
-/* 4. OPTIONAL: Subtle Hover Effect */
-/* Since it's already "active," we can make it pop just a tiny bit more when touched */
+/* ── Subtle Hover Effect ── */
+/* ── Since it's already "active," we can make it pop just a tiny bit more when touched ── */
 .interactive-item:hover {
   transform: translateX(8px);
   background: rgba(255, 255, 255, 0.04);
@@ -301,7 +302,7 @@ body.focus-mode::after {
   .span2, .span3 { grid-column: span 1; }
   .gc { padding: 1.8rem; border-radius: 20px; }
   
-  /* Prevent horizontal cut-offs for internal grids */
+  /* ── Prevent horizontal cut-offs for internal grids ── */
   .grid-mobile-fix {
     grid-template-columns: 1fr !important;
   }
@@ -326,7 +327,7 @@ body.focus-mode::after {
   footer { padding-top: 4rem !important; padding-bottom: 4rem !important; }
 }
 
-/* Specific override for the name on small mobile screens */
+/* ── Specific override for the name on small mobile screens ── */
 @media (max-width: 600px) {
   h1.animate-name {
     font-size: 2.5rem !important; /* Forces a smaller size on mobile */
@@ -382,12 +383,12 @@ body.focus-mode::after {
   color: var(--accent);
 }
 
-/* Auto-hide on mobile to prevent overlap with the name */
+/* ── Auto-hide on mobile to prevent overlap with the name ── */
 @media (max-width: 1024px) {
   .hero-quote-adjustable { display: none; }
 }
 
-/* Ensure the container is a flexible box */
+/* ── Ensure the container is a flexible box ── */
 .container {
   display: flex;
   flex-direction: column;
@@ -398,13 +399,13 @@ body.focus-mode::after {
   box-sizing: border-box; /* Crucial: keeps padding INSIDE the width calculation */
 }
 
-/* Remove any horizontal scrolling globally */
+/* ── Remove any horizontal scrolling globally ── */
 html, body {
   overflow-x: hidden;
   position: relative;
 }
 
-/* THE MAIN CANVAS */
+/* ── THE MAIN CANVAS ── */
 .bg-mesh {
   position: fixed;
   top: 0;
@@ -417,7 +418,7 @@ html, body {
   filter: blur(80px); /* Smooths the blobs into a 'glow' */
 }
 
-/* INDIVIDUAL BLOBS */
+/* ── INDIVIDUAL BLOBS ── */
 .blob-1, .blob-2, .blob-3 {
   position: absolute;
   width: 600px;
@@ -449,7 +450,7 @@ html, body {
   animation: move3 5s infinite alternate ease-in-out;
 }
 
-/* MOVEMENT PATHS */
+/* ── MOVEMENT PATHS ── */
 @keyframes move1 {
   0%   { transform: translate(0, 0) scale(1); }
   100% { transform: translate(200px, 100px) scale(1.2); }
@@ -465,7 +466,7 @@ html, body {
   100% { transform: translate(-30%, -20%) scale(1.3); }
 }
 
-/* This forces the browser to calculate width correctly */
+/* ── This forces the browser to calculate width correctly ── */
 * {
     box-sizing: border-box !important;
 }
@@ -477,7 +478,7 @@ html, body {
     padding: 0;
 }
 
-/* Force the container to never exceed the screen width */
+/* ── Force the container to never exceed the screen width ── */
 .container {
     width: 100vw !important; /* Viewport width */
     max-width: 100% !important;
@@ -488,62 +489,128 @@ html, body {
     flex-direction: column;
 }
 
+/* ── This class will be applied to your main-wrapper div ── */
+.main-wrapper.is-blurred {
+  filter: blur(15px);
+  pointer-events: none;
+  transition: filter 0.3s ease;
+}
+
+#cred-overlay.active {
+  display: flex;
+}
+
+#cred-overlay.active #expanded-img {
+  transform: scale(1);
+}
+
+/* ── BLUR SYSTEM for credentials ── */
+/* ── BLUR SYSTEM ── */
+.content-layer {
+  transition: filter 0.5s cubic-bezier(0.1, 0.1, 0.1, 0.1);
+  will-change: filter;
+}
+.content-layer.is-blurred {
+  filter: blur(10px) brightness(0.9);
+  pointer-events: none;
+}
+
+#cred-overlay {
+  position: fixed; 
+  inset: 0; 
+  z-index: 100001; 
+  display: none; /* JS toggles this to flex */
+  background: rgba(30, 0, 66, 0.179); 
+  backdrop-filter: blur(8px);
+  align-items: center; 
+  justify-content: center; 
+  cursor: pointer;
+  
+  /* ADD THESE FOR FADE OUT */
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+#cred-overlay.active {
+  opacity: 1;
+}
+
+#expanded-img { 
+  max-width: 85%; 
+  max-height: 80vh; 
+  border-radius: 12px; 
+  box-shadow: 0 0 50px rgba(0,0,0,0.8); 
+  
+  /* ADD THESE FOR SCALE + FADE */
+  transform: scale(0.8); 
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
+}
+
+#cred-overlay.active #expanded-img { 
+  transform: scale(1); 
+  opacity: 1;
+}
+
+
+
 </style>
 </head>
 <body>
 
-
+<div id="cred-overlay">
+    <button id="close-cred" style="position:absolute; top:30px; right:30px; background:none; border:none; color:white; font-size:3rem; cursor:pointer;">&times;</button>
+    <img id="expanded-img" src="" alt="Credential">
+</div>
 
 <div id="cur"></div>
 <div id="ring"></div>
 
 <div class="main-wrapper">
   <section class="container" style="padding-top:3rem; padding-bottom:3rem;">
-    <div class="profile-box animate-eyebrow">
-      <img src="profile.jpg" alt="Ramida Penuka">
-    </div>
-
-    
-
-    <div class="status-indicator animate-eyebrow" style="margin-bottom: 1rem;">
-      <span class="dot"></span>
-      <span class="status-text">Open for work</span>
-    </div>
-
-    <span class="eyebrow animate-eyebrow">— Portfolio 2026 —</span>
-      <div class="name-entrance-wrapper">
-        <h1 class="animate-name" style="font-size:clamp(3.5rem,10vw,6.5rem);margin-top: -0.35rem; letter-spacing:-.05em; line-height:1.1;">
-          <span class="shimmer-text">Ramida Penuka </span>
-
-          <div class="about-section hero-fade" 
-     style="width: 100%; 
-            display: flex; 
-            justify-content: flex-start;">
-            
-  <p style="font-size: clamp(1rem, 4.5vw, 1.25rem); 
-            width: 95%; 
-            max-width: 60ch; 
-            margin-top: 2rem; 
-            color: rgba(242, 242, 245, 0.8); 
-            line-height: 1.6; 
-            letter-spacing: 0.02em;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;">
-    Transport Management & Logistics Engineering Undergraduate. 
-    Synthesizing engineering precision with data analytics to optimize global supply chains.
-  </p>
-</div>
-        </h1>
+      <div class="profile-box animate-eyebrow">
+        <img src="images/profile.jpg" alt="Ramida Penuka">
       </div>
-    
+
+      <div class="content-layer">
+        
+        <div class="status-indicator animate-eyebrow" style="margin-bottom: 1rem;">
+        <span class="dot"></span>
+        <span class="status-text">Open for work</span>
+      </div>
+
+      <span class="eyebrow animate-eyebrow">— Portfolio 2026 —</span>
+        <div class="name-entrance-wrapper">
+          <h1 class="animate-name" style="font-size:clamp(3.5rem,10vw,6.5rem);margin-top: -0.35rem; letter-spacing:-.05em; line-height:1.1;">
+              <span class="shimmer-text">Ramida Penuka </span>
+
+              <div class="about-section hero-fade" 
+                  style="width: 100%; 
+                  display: flex; 
+                  justify-content: flex-start;">
+              
+                  <p style="font-size: clamp(1rem, 4.5vw, 1.25rem); 
+                      width: 95%; 
+                      max-width: 60ch; 
+                      margin-top: 2rem; 
+                      color: rgba(242, 242, 245, 0.8); 
+                      line-height: 1.6; 
+                      letter-spacing: 0.02em;
+                      word-wrap: break-word;
+                      overflow-wrap: break-word;
+                      white-space: normal;">
+                        Transport Management & Logistics Engineering Undergraduate. 
+                        Synthesizing engineering precision with data analytics to optimize global supply chains.
+                    </p>
+                </div>
+            </h1>
+        </div>
   </section>
 
 
 
   
   <div class="container" style="padding-top: 0;">
-
     <section class="container" style="position: relative;"> 
       <div class="hero-quote-adjustable hero-fade" 
         style="--top: -27rem; 
@@ -572,29 +639,65 @@ html, body {
           <div class="interactive-item" style="display: flex; gap: 16px;">
             <svg style="width: 22px; height: 22px; color: var(--blue); margin-top: 4px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
             <div>
-              <p style="font-weight:600; color:var(--t1); font-size:1.1rem;">BSc Eng Hons in TMLE</p>
+              <p style="font-weight:600; color:var(--t1); font-size:1.1rem;">BSc Eng Hons in Transport Management & Logistics Engineering | 3.4GPA</p>
               <p class="body-sm">University of Moratuwa</p>
               <div class="highlight-badge" style="margin-top:10px;">2028 Graduate</div>
+              <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+                    <button class="view-cred-btn" data-img="images/gallery.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Credentials</button>
+                </div>
             </div>
           </div>
           
+          
+
           <div class="interactive-item" style="display: flex; gap: 16px;">
             <svg style="width: 22px; height: 22px; color: var(--blue); margin-top: 4px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
             <div>
-              <p style="font-weight:600; color:var(--t1); font-size:1.1rem;">Physics (A), Maths (B), Chemistry (B)</p>
+              <p style="font-weight:600; color:var(--t1); font-size:1.1rem;">Physics : A | Maths & Chemistry : B <br>
+                General English : B
+              </p>
               <p class="body-sm">Royal College, Colombo 07</p>
               <div class="highlight-badge" style="margin-top:10px;">2022 A/L</div>
+              <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+                    <button class="view-cred-btn" data-img="images/gallery.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Credentials</button>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div style="margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border);">
+          <div class="grid-mobile-fix" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:15px;">
+          
+          
+          
           <div class="interactive-item" style="display: flex; gap: 16px;">
             <svg style="width: 22px; height: 22px; color: var(--blue); margin-top: 4px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             <div>
               <p style="font-weight:600; color:var(--t1); font-size:1.1rem;">CIMA OCS Exams (Reading)</p>
+              <p class="body-sm">Inspire Business School</p>
+              
               <div class="highlight-badge" style="margin-top:10px;">Expected 2026</div>
+              <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+                    <button class="view-cred-btn" data-img="images/gallery.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Credentials</button>
+                </div>
             </div>
           </div>
+
+          <div class="interactive-item" style="display: flex; gap: 16px; align-items: flex-start;">
+            <svg style="width: 30px; height: 30px; color: var(--blue); margin-top: 4px; flex-shrink: 0;" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C12 2 12 10 4 12C12 14 12 22 12 22C12 22 12 14 20 12C12 10 12 2 12 2Z" />
+            </svg>
+
+            <div style="flex-grow: 1;">
+                <p style="font-weight:600; color:var(--t1); font-size:1.1rem;">AI & Machine Learning Engineer</p>
+                <p class="body-sm">SLIIT (Stage 1)</p>
+                <div class="highlight-badge" style="margin-top:10px;">Expected 2026</div>
+                
+
+                <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+                    <button class="view-cred-btn" data-img="images/gallery.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Credentials</button>
+                </div>
+              </div>
+            </div>
+
         </div>
       </div>
 
@@ -606,12 +709,14 @@ html, body {
           <span class="highlight-badge b-blue">Python</span>
           <span class="highlight-badge b-blue">Power BI</span>
           <span class="highlight-badge b-blue">C#</span>
-          <span class="highlight-badge b-blue">Advanced Excel</span>
-          <span class="highlight-badge b-blue">Quantitative Data Analysis using Excel</span>
-          <span class="highlight-badge b-gold">SQL</span>
-          <span class="highlight-badge b-gold">QGIS</span>
+          <span class="highlight-badge b-blue">Machine Learning</span>
+          <span class="highlight-badge b-gold">Advanced Excel</span>
+          <span class="highlight-badge b-gold">Quantitative Data Analysis using Excel</span>
+          <span class="highlight-badge b-blue">SQL</span>
+          <span class="highlight-badge b-blue">QGIS</span>
           <span class="highlight-badge b-gold">Supply Chain Modeling</span>
           <span class="highlight-badge">Project Coordination</span>
+          <span class="highlight-badge">Project Management</span>
         </div>
       </div>
 
@@ -700,7 +805,7 @@ html, body {
           </div>
         </div>
       </div>
-
+    </div>
     </div>
   </div>
 
@@ -715,10 +820,15 @@ html, body {
   <div class="blob-3"></div>
   </div>
 
+  <div id="cred-overlay" style="position:fixed; inset:0; z-index:9999; display:none; background:rgba(0,0,0,0.8); backdrop-filter:blur(5px); align-items:center; justify-content:center; cursor:pointer;">
+    <button id="close-cred" style="position:absolute; top:30px; right:30px; background:none; border:none; color:white; font-size:2rem; cursor:pointer; z-index:10001;">&times;</button>
+    <img id="expanded-img" src="" style="max-width:85%; max-height:80vh; border-radius:12px; border:1px solid rgba(255,255,255,0.1); box-shadow:0 0 50px rgba(0,0,0,1); transform:scale(0.9); transition:transform 0.3s ease; cursor:default;">
+</div>
 
 </div>
 
 <script>
+
 /* ── CURSOR ── */
 const cur=document.getElementById('cur'), ring=document.getElementById('ring');
 let mx=0,my=0,rx=0,ry=0;
@@ -727,18 +837,15 @@ document.addEventListener('mousemove',e=>{
   cur.style.left=mx+'px'; cur.style.top=my+'px';
 });
 (function anim(){
-  rx+=(mx-rx)*.15; ry+=(my-ry)*.15;
+  rx+=(mx-rx)*0.25; ry+=(my-ry)*0.25;
   ring.style.left=rx+'px'; ring.style.top=ry+'px';
   requestAnimationFrame(anim);
 })();
-
 
 // --- PFP FOCUS MODE ---
 const profileBox = document.querySelector('.profile-box');
 profileBox.addEventListener('mouseenter', () => document.body.classList.add('focus-mode'));
 profileBox.addEventListener('mouseleave', () => document.body.classList.remove('focus-mode'));
-
-
 
 /* ── INTERACTIVE HOVER ── */
 document.querySelectorAll('.gc').forEach(card=>{
@@ -758,6 +865,61 @@ document.querySelectorAll('.gc').forEach(card=>{
     ring.style.border = '1.5px dashed rgba(0, 210, 255, 0.4)';
   });
 });
+
+
+/* ── REPLAYABLE SCROLL REVEAL ── */
+/* ── REVEAL ── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('reveal'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.gc').forEach(el => observer.observe(el));
+
+/* ── LIGHTBOX LOGIC for credentials ── */
+const overlay = document.getElementById('cred-overlay');
+const expandedImg = document.getElementById('expanded-img');
+const mainWrapper = document.querySelector('.main-wrapper');
+const viewBtns = document.querySelectorAll('.view-cred-btn');
+
+viewBtns.forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const imgSrc = btn.getAttribute('data-img');
+    expandedImg.src = imgSrc;
+    
+    overlay.style.display = 'flex';
+    setTimeout(() => overlay.classList.add('active'), 10);
+    mainWrapper.classList.add('is-blurred');
+    
+    // Hide custom cursor while image is open
+    cur.style.opacity = '0';
+    ring.style.opacity = '0';
+  });
+});
+
+function closeOverlay() {
+    // 1. Remove the 'active' class first to trigger the CSS opacity/scale transition
+    overlay.classList.remove('active');
+    
+    // 2. Remove the blur from the background
+    mainWrapper.classList.remove('is-blurred');
+    
+    // 3. Wait for the 0.4s CSS transition to finish before hiding the element entirely
+    setTimeout(() => { 
+        overlay.style.display = 'none'; 
+    }, 400); // Matches the 0.4s duration in your CSS
+    
+    // 4. Bring the custom cursor back
+    if (cur && ring) {
+        cur.style.opacity = '1';
+        ring.style.opacity = '1';
+    }
+}
+
+overlay.addEventListener('click', closeOverlay);
+document.getElementById('close-cred').addEventListener('click', closeOverlay);
+expandedImg.addEventListener('click', (e) => e.stopPropagation());
+document.addEventListener('keydown', (e) => { if(e.key === "Escape") closeOverlay(); });
+
 
 /* ── REPLAYABLE SCROLL REVEAL ── */
 const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };

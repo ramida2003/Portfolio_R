@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,18 +19,37 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
   --t1:#f2f2f5;--t2:#a1a1aa;
   --t3:#ffffff; 
   --violet:#7c5cfc;--blue:#00d2ff;
+  --body-bg:#080809;
+  --dot-color:rgba(255,255,255,0.05);
+  --mesh-base:#050505;
+  --blob-color:#7c5cfca5;
+  --blob-color2:#7c5cfc6c;
+}
+
+[data-theme="light"]{
+  --bg:#e8e8f8;--surface:rgba(255,255,255,0.65);
+  --border:rgba(0,0,0,0.08);
+  --t1:#1a1a2e;--t2:#52527a;
+  --t3:#0a0a20;
+  --violet:#6b44f0;--blue:#0088bb;
+  --body-bg:#f0f0f8;
+  --dot-color:rgba(0,0,0,0.035);
+  --mesh-base:#dcdcf0;
+  --blob-color:rgba(167,139,250,0.5);
+  --blob-color2:rgba(139,92,246,0.3);
 }
 
 /* ── Body color ── */
 body{
-  background:#080809;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+  background:var(--body-bg);
+  background-image: radial-gradient(var(--dot-color) 1px, transparent 0);
   background-size: 40px 40px;
   background-attachment: fixed;
-  color:#f2f2f5;
+  color:var(--t1);
   font-family:'Geist','Inter',sans-serif;
   overflow-x:hidden;
   width: 100%;
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
 /* ── FOCUS BLUR OVERLAY ── */
@@ -412,10 +432,11 @@ html, body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #050505; /* Deep base */
+  background-color: var(--mesh-base);
   z-index: -1;
   overflow: hidden;
-  filter: blur(80px); /* Smooths the blobs into a 'glow' */
+  filter: blur(80px);
+  transition: background-color 0.4s ease;
 }
 
 /* ── INDIVIDUAL BLOBS ── */
@@ -428,14 +449,14 @@ html, body {
 }
 
 .blob-1 {
-  background: #7c5cfca5;; /* Your signature blue */
+  background: var(--blob-color);
   top: -100px;
   left: -100px;
   animation: move1 5s infinite alternate ease-in-out;
 }
 
 .blob-2 {
-  background: #7c5cfc6c; /* A deep violet to complement the blue */
+  background: var(--blob-color2);
   bottom: -200px;
   right: -100px;
   animation: move2 5s infinite alternate ease-in-out;
@@ -554,10 +575,227 @@ html, body {
 
 
 
+
+/* ── THEME TOGGLE BUTTON ── */
+#theme-toggle {
+  position: fixed;
+  top: 1.2rem;
+  right: 1.5rem;
+  z-index: 10000;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+#theme-toggle:hover {
+  transform: scale(1.12);
+  border-color: var(--blue);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+#theme-toggle .icon-sun,
+#theme-toggle .icon-moon { 
+  position: absolute;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+:root:not([data-theme="light"]) .icon-sun { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+:root:not([data-theme="light"]) .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
+[data-theme="light"] .icon-sun { opacity: 1; transform: rotate(0deg) scale(1); }
+[data-theme="light"] .icon-moon { opacity: 0; transform: rotate(90deg) scale(0.5); }
+
+/* ── LIGHT MODE OVERRIDES ── */
+[data-theme="light"] body {
+  background: var(--body-bg);
+  color: var(--t1);
+}
+[data-theme="light"] .gc {
+  background:
+    radial-gradient(circle at bottom left, rgba(107, 68, 240, 0.05) 10%, transparent 50%),
+    var(--surface);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+}
+[data-theme="light"] .shimmer-text {
+  background: linear-gradient(90deg, #1a1a2e 0%, #1a1a2e 35%, #6b44f0 50%, #4f33c0 65%, #1a1a2e 100%);
+  background-size: 400% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+[data-theme="light"] .blue-shimmer {
+  background: linear-gradient(90deg, #0088bb 0%, #0088bb 40%, #0a0a20 50%, #0088bb 60%, #0a0a20 100%);
+  background-size: 400% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+[data-theme="light"] .spot {
+  background: radial-gradient(450px circle at var(--mx,50%) var(--my,50%), rgba(107,68,240,0.08), transparent 70%);
+}
+[data-theme="light"] .cta-btn {
+  background: var(--blue);
+  color: #ffffff;
+  box-shadow: 0 10px 20px -10px rgba(0,136,187,0.4);
+}
+[data-theme="light"] .cta-btn:hover {
+  background: #006699;
+  box-shadow: 0 15px 30px -10px rgba(0,102,153,0.4);
+}
+[data-theme="light"] .highlight-badge {
+  background: rgba(107, 68, 240, 0.07);
+  border-color: rgba(107, 68, 240, 0.2);
+  color: #6b44f0;
+}
+[data-theme="light"] .b-blue {
+  background: rgba(0, 136, 187, 0.1) !important;
+  border-color: rgba(0, 136, 187, 0.3) !important;
+  color: #006699 !important;
+}
+[data-theme="light"] .b-gold {
+  background: rgba(22, 163, 74, 0.08) !important;
+  border-color: rgba(22, 163, 74, 0.25) !important;
+  color: #15803d !important;
+}
+[data-theme="light"] .status-indicator {
+  background: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.25);
+}
+[data-theme="light"] .contact-link:hover {
+  background: rgba(0,0,0,0.04);
+}
+[data-theme="light"] #cur {
+  background: var(--blue);
+}
+[data-theme="light"] #ring {
+  border-color: rgba(0, 136, 187, 0.5);
+}
+[data-theme="light"] .interactive-item {
+  background: rgba(0,0,0,0.02);
+}
+[data-theme="light"] .interactive-item:hover {
+  background: rgba(0,0,0,0.04);
+}
+[data-theme="light"] body::after {
+  background: rgba(240,240,255,0.1);
+}
+
+[data-theme="light"] .about-section p {
+  color: rgba(26, 26, 46, 0.75) !important;
+}
+
+/* ── CONTACT FORM ── */
+.cf-wrap { display: flex; flex-direction: column; gap: 1rem; }
+
+.cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media(max-width:600px){ .cf-row { grid-template-columns: 1fr; } }
+
+.cf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cf-field label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--t2);
+}
+
+.cf-field input,
+.cf-field textarea {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  color: var(--t1);
+  font-family: 'Geist', 'Inter', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  resize: none;
+}
+
+.cf-field input::placeholder,
+.cf-field textarea::placeholder { color: var(--t2); opacity: 0.5; }
+
+.cf-field input:focus,
+.cf-field textarea:focus {
+  border-color: var(--blue);
+  background: rgba(255,255,255,0.07);
+  box-shadow: 0 0 0 3px rgba(0,210,255,0.1);
+}
+
+[data-theme="light"] .cf-field input,
+[data-theme="light"] .cf-field textarea {
+  background: rgba(0,0,0,0.04);
+  color: var(--t1);
+}
+[data-theme="light"] .cf-field input:focus,
+[data-theme="light"] .cf-field textarea:focus {
+  background: rgba(0,0,0,0.06);
+  box-shadow: 0 0 0 3px rgba(0,136,187,0.12);
+}
+
+.cf-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.85rem 2rem;
+  background: var(--blue);
+  color: #080809;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Geist', 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 8px 20px -8px rgba(0,210,255,0.4);
+  align-self: flex-start;
+}
+.cf-submit:hover { transform: scale(1.05); background: #fff; box-shadow: 0 12px 28px -8px rgba(255,255,255,0.35); }
+.cf-submit:active { transform: scale(0.98); }
+
+[data-theme="light"] .cf-submit { color: #ffffff; }
+[data-theme="light"] .cf-submit:hover { background: #006699; box-shadow: 0 12px 28px -8px rgba(0,102,153,0.35); }
+
+.cf-success {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 1rem;
+  text-align: center;
+  animation: fadeInUpBlur 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.cf-success svg { color: #22c55e; }
+.cf-success .cf-success-title { font-size: 1.4rem; font-weight: 700; color: var(--t1); }
+.cf-success .cf-success-sub { font-size: 0.95rem; color: var(--t2); max-width: 36ch; line-height: 1.6; }
+
+[data-theme="light"] .cv-download-btn {
+  color: var(--blue) !important;
+  border-color: var(--blue) !important;
+}
+[data-theme="light"] .cv-download-btn:hover {
+  background: rgba(0,136,187,0.08) !important;
+  box-shadow: none !important;
+  color: var(--blue) !important;
+}
 </style>
 </head>
 <body>
-
+<button id="theme-toggle" aria-label="Toggle theme">
+  <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t2)"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t2)"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
 <div id="cred-overlay">
     <button id="close-cred" style="position:absolute; top:30px; right:30px; background:none; border:none; color:white; font-size:3rem; cursor:pointer;">&times;</button>
     <img id="expanded-img" src="" alt="Credential">
@@ -732,6 +970,9 @@ html, body {
               </div>
               <p style="font-weight:600; font-size:1.2rem; margin-bottom:.8rem; color:var(--t1);">Garumuni Export Co. Improvement</p>
               <p class="body-sm">Optimized export workflows and procurement strategies to streamline international distribution.</p>
+              <div style="margin-top:1rem;">
+                <button class="view-cred-btn" data-img="project-garumuni.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
+              </div>
             </div>
           <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -740,6 +981,9 @@ html, body {
             </div>
             <p style="font-weight:600; font-size:1.2rem; margin-bottom:.8rem; color:var(--t1);">Prime Mover Process Automation</p>
             <p class="body-sm">Designed an automated framework for prime mover movements to reduce idle time and increase terminal efficiency.</p>
+            <div style="margin-top:1rem;">
+              <button class="view-cred-btn" data-img="project-primemover.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
+            </div>
           </div>
         </div>
       </div>
@@ -753,16 +997,25 @@ html, body {
             <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">CHAIR PERSON</p>
             <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Data Storm v6.0 - OCTAVE</p>
             <p class="body-sm">Led industry collaboration with John Keells Holdings for data analytics.</p>
+            <div style="margin-top:1rem;">
+              <button class="view-cred-btn" data-img="project-datastorm.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
+            </div>
           </div>
           <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
             <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">PROJECT LEADER</p>
             <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Library Renovation - Atlas Axillia</p>
             <p class="body-sm">Managed end-to-end renovation project for Atlas Axillia (Hemas Holdings subsidiary).</p>
+            <div style="margin-top:1rem;">
+              <button class="view-cred-btn" data-img="project-library.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
+            </div>
           </div>
           <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
             <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">LEADERSHIP</p>
             <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Rotaract Club Member</p>
             <p class="body-sm">Inducted based on dedication to community-driven logistics and teamwork.</p>
+            <div style="margin-top:1rem;">
+              <button class="view-cred-btn" data-img="project-rotaract.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
+            </div>
           </div>
         </div>
       </div>
@@ -798,11 +1051,54 @@ html, body {
             <p class="body-sm" style="margin-bottom: 2rem; max-width: 320px; margin-left: auto;">
               Available for industry collaborations and data-driven logistics roles starting late 2026.
             </p>
-            <a href="mailto:lgrpenuka@gmail.com" class="cta-btn">
-              Start a Conversation
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </a>
+            <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:flex-end;">
+              <a href="mailto:lgrpenuka@gmail.com" class="cta-btn">
+                Start a Conversation
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+              <a href="cv.pdf" download class="cta-btn cv-download-btn" style="background:transparent; color:var(--blue); border:1.5px solid var(--blue); box-shadow:none;">
+                Download CV
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </a>
+            </div>
           </div>
+        </div>
+      </div>
+
+      <div class="gc span3">
+        <div class="spot"></div>
+        <span class="eyebrow">Send a Message</span>
+        <h3 class="h-lg blue-shimmer">Get in Touch</h3>
+
+        <div id="cf-form-wrap" class="cf-wrap">
+          <div class="cf-row">
+            <div class="cf-field">
+              <label for="cf-name">Your Name</label>
+              <input type="text" id="cf-name" placeholder="e.g. John Silva" autocomplete="name">
+            </div>
+            <div class="cf-field">
+              <label for="cf-email">Email Address</label>
+              <input type="email" id="cf-email" placeholder="you@example.com" autocomplete="email">
+            </div>
+          </div>
+          <div class="cf-field">
+            <label for="cf-subject">Subject</label>
+            <input type="text" id="cf-subject" placeholder="What\'s this about?">
+          </div>
+          <div class="cf-field">
+            <label for="cf-message">Message</label>
+            <textarea id="cf-message" rows="5" placeholder="Tell me about your project or opportunity…"></textarea>
+          </div>
+          <button class="cf-submit" id="cf-btn" type="button">
+            Send Message
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+
+        <div id="cf-success" class="cf-success">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <p class="cf-success-title">Message sent!</p>
+          <p class="cf-success-sub">Thanks for reaching out. Ramida will get back to you as soon as possible.</p>
         </div>
       </div>
     </div>
@@ -934,6 +1230,68 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 document.querySelectorAll('.gc').forEach(card => revealObserver.observe(card));
+
+/* ── DARK / LIGHT THEME TOGGLE ── */
+(function() {
+  const root = document.documentElement;
+  const btn = document.getElementById('theme-toggle');
+  const stored = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  if (stored === 'light' || (!stored && !prefersDark)) {
+    root.setAttribute('data-theme', 'light');
+  }
+
+  btn.addEventListener('click', () => {
+    const isLight = root.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      root.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      root.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+})();
+
+
+/* ── CONTACT FORM ── */
+(function() {
+  const btn = document.getElementById('cf-btn');
+  if (!btn) return;
+
+  btn.addEventListener('click', function() {
+    const name    = document.getElementById('cf-name').value.trim();
+    const email   = document.getElementById('cf-email').value.trim();
+    const subject = document.getElementById('cf-subject').value.trim();
+    const message = document.getElementById('cf-message').value.trim();
+
+    if (!name || !email || !message) {
+      [['cf-name', name], ['cf-email', email], ['cf-message', message]].forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (!val) {
+          el.style.borderColor = 'rgba(239,68,68,0.7)';
+          el.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.15)';
+          setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 2500);
+        }
+      });
+      return;
+    }
+
+    const body = `Name: ${name}\nEmail: ${email}\n\n${message}`;
+    const mailtoURL = `mailto:lgrpenuka@gmail.com?subject=${encodeURIComponent(subject || 'Portfolio Contact: ' + name)}&body=${encodeURIComponent(body)}`;
+
+    window.location.href = mailtoURL;
+
+    // Show success state after a brief delay
+    setTimeout(() => {
+      document.getElementById('cf-form-wrap').style.display = 'none';
+      const success = document.getElementById('cf-success');
+      success.style.display = 'flex';
+    }, 600);
+  });
+})();
+
 </script>
 </body>
 </html>

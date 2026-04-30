@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Ramida Penuka — Logistics Engineer</title>
+<title>Ramida Penuka  — Logistics Engineer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -109,10 +109,12 @@ body.focus-mode::after {
 }
 
 .status-text {
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
   color: #4ade80;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
 }
 
 
@@ -234,7 +236,19 @@ body.focus-mode::after {
 }
 
 .gc.reveal { opacity: 1; transform: translateY(0); filter: blur(0px); }
+.gc::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  box-shadow: 0 0 0 0 rgba(0, 210, 255, 0);
+  transition: box-shadow 0.4s ease;
+  pointer-events: none;
+}
 .gc:hover { border-color: rgba(124, 92, 252, 0.25); transform: translateY(-4px) !important; }
+.gc:hover::after {
+  box-shadow: inset 0 0 20px rgba(0, 210, 255, 0.05), 0 0 15px rgba(0, 210, 255, 0.15);
+}
 .span2{grid-column:span 2;}
 .span3{grid-column:span 3;}
 
@@ -343,6 +357,9 @@ body.focus-mode::after {
   p[style*="margin-left: auto"] { 
     margin-left: 0 !important; 
   }
+
+  #network-canvas { display: none !important; }
+  body { background-image: none !important; }
 
   footer { padding-top: 4rem !important; padding-bottom: 4rem !important; }
 }
@@ -485,6 +502,51 @@ html, body {
 @keyframes move3 {
   0%   { transform: translate(-50%, -50%) scale(1); }
   100% { transform: translate(-30%, -20%) scale(1.3); }
+}
+
+/* ── NETWORK CANVAS ── */
+#network-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+/* ── TICKER ── */
+.ticker-wrap {
+  width: 100%;
+  overflow: hidden;
+  background: rgba(0, 210, 255, 0.03);
+  border-top: 1px solid rgba(0, 210, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 210, 255, 0.1);
+  padding: 14px 0;
+  margin-bottom: 3.5rem;
+  display: flex;
+}
+.ticker {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker 35s linear infinite;
+}
+.ticker-item {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--blue);
+  letter-spacing: 0.15em;
+  padding: 0 24px;
+}
+.ticker-dot {
+  color: var(--t2);
+  opacity: 0.4;
+}
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* ── This forces the browser to calculate width correctly ── */
@@ -641,6 +703,13 @@ html, body {
 }
 [data-theme="light"] body::after {
   background: rgba(240,240,255,0.1);
+}
+[data-theme="light"] .ticker-wrap {
+  background: rgba(0, 136, 187, 0.05);
+  border-color: rgba(0, 136, 187, 0.15);
+}
+[data-theme="light"] #network-canvas {
+  opacity: 0.25;
 }
 
 [data-theme="light"] .about-section p {
@@ -868,9 +937,118 @@ html, body {
 #lb-img-wrap.anim-open  { animation: lb-open-in   0.45s cubic-bezier(0.34,1.56,0.64,1) forwards; }
 #lb-img-wrap.anim-exit  { animation: lb-exit-blur  0.28s cubic-bezier(0.4,0,1,1) forwards; }
 #lb-img-wrap.anim-enter { animation: lb-enter-blur  0.4s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+/* Carousel arrows + dots — only visible in carousel mode */
+.lb-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(20,20,28,0.55);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.92);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+  z-index: 10;
+  opacity: 0.9;
+}
+.lb-arrow:hover { background: rgba(40,40,52,0.85); transform: translateY(-50%) scale(1.08); opacity: 1; }
+.lb-arrow.prev { left: -68px; }
+.lb-arrow.next { right: -68px; }
+@media (max-width: 900px) {
+  .lb-arrow.prev { left: 10px; }
+  .lb-arrow.next { right: 10px; }
+}
+
+.lb-dots {
+  display: none;
+  gap: 8px;
+  margin-top: 2px;
+  justify-content: center;
+}
+.lb-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.22);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.25s ease, width 0.3s ease, border-radius 0.25s ease;
+}
+.lb-dot:hover { background: rgba(255,255,255,0.5); }
+.lb-dot.active { background: rgba(0,210,255,0.95); width: 24px; border-radius: 4px; }
+
+#cred-overlay.carousel-mode .lb-arrow { display: flex; }
+#cred-overlay.carousel-mode .lb-dots { display: flex; }
+
+/* ── MODERN PRELOADER ── */
+body.locked { overflow: hidden; }
+
+.preloader.modern {
+  position: fixed;
+  inset: 0;
+  background: #050508;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  filter: blur(0px);
+  transition: opacity 0.8s cubic-bezier(0.65, 0, 0.35, 1), transform 0.8s cubic-bezier(0.65, 0, 0.35, 1), filter 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.preloader.modern.exit {
+  opacity: 0;
+  filter: blur(20px);
+  transform: scale(1.05);
+}
+
+.welcome-text-modern {
+  font-family: 'Geist', 'Inter', sans-serif;
+  font-size: 3rem;
+  font-weight: 500;
+  color: #f2f2f5;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(15px);
+  animation: modernReveal 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+[data-theme="light"] .preloader.modern {
+  background: #f0f0f8;
+}
+[data-theme="light"] .welcome-text-modern {
+  color: #1a1a2e;
+}
+
+@keyframes modernReveal {
+  to {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .welcome-text-modern { font-size: 2rem; padding: 0 20px; text-align: center; }
+}
 </style>
 </head>
-<body>
+<body class="locked">
+<div id="preloader" class="preloader modern">
+  <div class="welcome-text-modern">
+    Welcome, I'm Ramida.
+  </div>
+</div>
 <button id="theme-toggle" aria-label="Toggle theme">
   <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t2)"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
   <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t2)"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -880,7 +1058,14 @@ html, body {
   <div id="lb-inner">
     <div id="lb-img-wrap">
       <img id="expanded-img" src="" alt="Credential">
+      <button class="lb-arrow prev" id="lb-prev" aria-label="Previous">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <button class="lb-arrow next" id="lb-next" aria-label="Next">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
     </div>
+    <div id="lb-dots" class="lb-dots"></div>
     <div id="lb-footer">
       <span id="lb-counter" class="lb-counter"></span>
       <span id="lb-hint" class="lb-hint">
@@ -904,7 +1089,7 @@ html, body {
         
         <div class="status-indicator animate-eyebrow" style="margin-bottom: 1rem;">
         <span class="dot"></span>
-        <span class="status-text">Open for work</span>
+        <span class="status-text">SYS: ONLINE & ACTIVE</span>
       </div>
 
       <span class="eyebrow animate-eyebrow">— Portfolio 2026 —</span>
@@ -934,6 +1119,8 @@ html, body {
             </h1>
         </div>
   </section>
+
+
 
 
 
@@ -1061,7 +1248,7 @@ html, body {
               <p style="font-weight:600; font-size:1.2rem; margin-bottom:.8rem; color:var(--t1);">Garumuni Export Co. Improvement</p>
               <p class="body-sm">Optimized export workflows and procurement strategies to streamline international distribution.</p>
               <div style="margin-top:1rem;">
-                <button class="view-cred-btn" data-imgs="profile.jpg,gallery.jpg,profile.jpg,gallery.jpg,profile.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
+                <button class="view-cred-btn" data-carousel="true" data-imgs="profile.jpg,gallery.jpg,profile.jpg,gallery.jpg,profile.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
               </div>
             </div>
           <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
@@ -1136,7 +1323,7 @@ html, body {
           <div style="text-align: right;">
             <div class="status-indicator" style="margin-left: auto; margin-bottom: 1rem;">
               <span class="dot"></span>
-              <span class="status-text">Accepting Projects</span>
+              <span class="status-text">SYS: READY FOR DEPLOYMENT</span>
             </div>
             <p class="body-sm" style="margin-bottom: 2rem; max-width: 320px; margin-left: auto;">
               Available for industry collaborations and data-driven logistics roles starting late 2026.
@@ -1205,12 +1392,24 @@ html, body {
   <div class="blob-2"></div>
   <div class="blob-3"></div>
   </div>
+  <canvas id="network-canvas"></canvas>
 
 
 
 </div>
 
 <script>
+/* ── PRELOADER SEQUENCE ── */
+(function() {
+  const preloader = document.getElementById('preloader');
+  if(preloader) {
+    setTimeout(() => {
+      preloader.classList.add('exit');
+      document.body.classList.remove('locked');
+      setTimeout(() => preloader.remove(), 1000);
+    }, 1800);
+  }
+})();
 
 /* ── CURSOR ── */
 const cur=document.getElementById('cur'), ring=document.getElementById('ring');
@@ -1265,18 +1464,50 @@ document.querySelectorAll('.gc').forEach(el => observer.observe(el));
   const counter    = document.getElementById('lb-counter');
   const hint       = document.getElementById('lb-hint');
   const closeBtn   = document.getElementById('close-cred');
+  const prevBtn    = document.getElementById('lb-prev');
+  const nextBtn    = document.getElementById('lb-next');
+  const dotsEl     = document.getElementById('lb-dots');
   const mainWrap   = document.querySelector('.main-wrapper');
 
-  let imgs = [], idx = 0;
+  let imgs = [], idx = 0, isCarousel = false, animating = false;
 
   function updateCounter() {
     counter.textContent = imgs.length > 1 ? (idx + 1) + ' / ' + imgs.length : '';
   }
 
-  function open(imageList) {
+  function buildDots() {
+    dotsEl.innerHTML = '';
+    if (!isCarousel) return;
+    imgs.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'lb-dot' + (i === idx ? ' active' : '');
+      d.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+      d.addEventListener('click', e => { e.stopPropagation(); goTo(i); });
+      dotsEl.appendChild(d);
+    });
+  }
+
+  function updateDots() {
+    if (!isCarousel) return;
+    dotsEl.querySelectorAll('.lb-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === idx);
+    });
+  }
+
+  function setHintText() {
+    const svg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
+    hint.innerHTML = svg + ' ' + (isCarousel ? 'Use arrows or dots to navigate' : 'Tap image to cycle');
+  }
+
+  function open(imageList, carouselMode) {
     imgs = imageList;
     idx  = 0;
+    isCarousel = !!carouselMode && imgs.length > 1;
     imgEl.src = imgs[0];
+
+    overlay.classList.toggle('carousel-mode', isCarousel);
+    setHintText();
+    buildDots();
     updateCounter();
     hint.classList.toggle('hide', imgs.length < 2);
 
@@ -1291,21 +1522,29 @@ document.querySelectorAll('.gc').forEach(el => observer.observe(el));
     if (mainWrap) mainWrap.classList.add('is-blurred');
   }
 
-  function advance() {
-    if (imgs.length < 2) return;
+  function goTo(newIdx) {
+    if (imgs.length < 2 || animating || newIdx === idx) return;
+    animating = true;
     imgWrap.classList.remove('anim-enter', 'anim-open');
     imgWrap.classList.add('anim-exit');
     imgWrap.addEventListener('animationend', () => {
-      idx = (idx + 1) % imgs.length;
+      idx = (newIdx + imgs.length) % imgs.length;
       imgEl.src = imgs[idx];
       updateCounter();
+      updateDots();
       imgWrap.classList.remove('anim-exit');
       imgWrap.classList.add('anim-enter');
-      imgWrap.addEventListener('animationend', () => imgWrap.classList.remove('anim-enter'), { once: true });
-      // Hide hint after first tap
-      hint.classList.add('hide');
+      imgWrap.addEventListener('animationend', () => {
+        imgWrap.classList.remove('anim-enter');
+        animating = false;
+      }, { once: true });
+      // Hide hint after first interaction (non-carousel only)
+      if (!isCarousel) hint.classList.add('hide');
     }, { once: true });
   }
+
+  function advance() { goTo(idx + 1); }
+  function retreat() { goTo(idx - 1); }
 
   function close() {
     overlay.classList.remove('active');
@@ -1324,13 +1563,18 @@ document.querySelectorAll('.gc').forEach(el => observer.observe(el));
       e.stopPropagation();
       const multi = btn.getAttribute('data-imgs');
       const single = btn.getAttribute('data-img');
+      const carousel = btn.getAttribute('data-carousel') === 'true';
       const list = multi ? multi.split(',').map(s => s.trim()) : [single];
-      open(list);
+      open(list, carousel);
     });
   });
 
-  // Tap image to advance
+  // Tap image to advance (works in both modes)
   imgWrap.addEventListener('click', e => { e.stopPropagation(); advance(); });
+
+  // Carousel arrow buttons
+  prevBtn.addEventListener('click', e => { e.stopPropagation(); retreat(); });
+  nextBtn.addEventListener('click', e => { e.stopPropagation(); advance(); });
 
   // Click backdrop to close
   overlay.addEventListener('click', close);
@@ -1338,8 +1582,13 @@ document.querySelectorAll('.gc').forEach(el => observer.observe(el));
   // Close button
   closeBtn.addEventListener('click', e => { e.stopPropagation(); close(); });
 
-  // Escape key
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (overlay.style.display !== 'flex') return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowRight') advance();
+    else if (e.key === 'ArrowLeft') retreat();
+  });
 })();
 
 
@@ -1361,22 +1610,34 @@ document.querySelectorAll('.gc').forEach(card => revealObserver.observe(card));
 (function() {
   const root = document.documentElement;
   const btn = document.getElementById('theme-toggle');
-  const stored = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
   
-  if (stored === 'light' || (!stored && !prefersDark)) {
-    root.setAttribute('data-theme', 'light');
+  function applyTheme(theme) {
+    if (theme === 'light') {
+      root.setAttribute('data-theme', 'light');
+    } else {
+      root.removeAttribute('data-theme');
+    }
   }
 
-  btn.addEventListener('click', () => {
-    const isLight = root.getAttribute('data-theme') === 'light';
-    if (isLight) {
-      root.removeAttribute('data-theme');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      root.setAttribute('data-theme', 'light');
-      localStorage.setItem('theme', 'light');
+  const stored = localStorage.getItem('theme');
+  if (stored) {
+    applyTheme(stored);
+  } else {
+    applyTheme(mediaQuery.matches ? 'dark' : 'light');
+  }
+
+  mediaQuery.addEventListener('change', (e) => {
+    if (!localStorage.getItem('theme')) {
+      applyTheme(e.matches ? 'dark' : 'light');
     }
+  });
+
+  btn.addEventListener('click', () => {
+    const currentTheme = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    applyTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
   });
 })();
 
@@ -1416,6 +1677,93 @@ document.querySelectorAll('.gc').forEach(card => revealObserver.observe(card));
       success.style.display = 'flex';
     }, 600);
   });
+})();
+
+/* ── SUPPLY CHAIN NETWORK CANVAS ── */
+(function() {
+  const canvas = document.getElementById('network-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let particles = [];
+  
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Node {
+    constructor() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.vx = (Math.random() - 0.5) * 0.5;
+      this.vy = (Math.random() - 0.5) * 0.5;
+      this.radius = Math.random() * 2 + 1;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0 || this.x > width) this.vx *= -1;
+      if (this.y < 0 || this.y > height) this.vy *= -1;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = document.documentElement.getAttribute('data-theme') === 'light' ? 'rgba(0,136,187,0.5)' : 'rgba(0, 210, 255, 0.5)';
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 60; i++) particles.push(new Node());
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    const lineColor = isLight ? 'rgba(0,136,187,' : 'rgba(0, 210, 255,';
+
+    particles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < 150) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `${lineColor}${1 - dist/150})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+      
+      // Interact with mouse
+      if (typeof mx !== 'undefined' && typeof my !== 'undefined') {
+        const dx = particles[i].x - mx;
+        const dy = particles[i].y - my;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 200) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(mx, my);
+          ctx.strokeStyle = `${lineColor}${1 - dist/200})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
 })();
 
 </script>
